@@ -45,7 +45,7 @@ pipeline {
                             def settings = '-s /home/jenkins/.m2/settings.xml'
 
                             if (params.stagingList != '') {
-                                sh "wget https://github.com/eclipse/microprofile-parent/raw/master/buildScripts/staging-augmenter-ubi8"
+                                sh "wget https://github.com/eclipse/microprofile-build-infra/raw/master/buildScripts/staging-augmenter-ubi8"
                                 sh "chmod +x ./staging-augmenter-ubi8"
                                 sh "./staging-augmenter-ubi8 -r ${params.stagingList} -o ../output-settings.xml /home/jenkins/.m2/settings.xml"
 
