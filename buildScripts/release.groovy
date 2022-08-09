@@ -88,7 +88,7 @@ pipeline {
                             if (fileExists('tracing/api')) {
                                 sh "scp tracing/api/target/*.jar genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing"
 
-                                sh "ssh genie.microprofile@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/apidocs"
+                                sh "ssh genie.microprofile@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing/apidocs"
                                 sh "scp -r tracing/api/target/apidocs/* genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/tracing/${params.module}-${params.releaseVersion}/apidocs"
                             }
                             if (fileExists('tracing/tck')) {
