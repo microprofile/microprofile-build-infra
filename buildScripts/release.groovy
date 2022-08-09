@@ -92,7 +92,7 @@ pipeline {
                                 sh "scp -r tracing/api/target/apidocs/* genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing/apidocs"
                             }
                             if (fileExists('tracing/tck')) {
-                                sh "find tck -name \"*.jar\" | xargs -I{} scp {} genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/tracing/${params.module}-${params.releaseVersion}/"
+                                sh "find tck -name \"*.jar\" | xargs -I{} scp {} genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing/"
                             }
                         }
                     }
