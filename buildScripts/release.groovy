@@ -82,7 +82,7 @@ pipeline {
                                 sh "find tck -name \"*.jar\" | xargs -I{} scp {} genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/"
                             }
                             if (fileExists('tracing/spec')) {
-                                sh "ssh genie.microprofile@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}"
+                                sh "ssh genie.microprofile@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing"
                                 sh "scp -r tracing/spec/target/generated-docs/* genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/tracing/${params.module}-${params.releaseVersion}"
                             }
                             if (fileExists('tracing/api')) {
