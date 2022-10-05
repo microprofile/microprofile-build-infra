@@ -53,7 +53,15 @@ pipeline {
                                 settings = '-s ../output-settings.xml -Pmp-staging'
                             }
 
-                            sh "mvn ${settings} release:prepare release:perform -B -Dtag=${params.tag} -DdevelopmentVersion=${params.snapshotVersion} -DreleaseVersion=${params.releaseVersion} -Drevremark=${params.revremark} -Drelease.revision=${params.revremark} -DstagingProgressTimeoutMinutes=20"
+                            if (params.module == 'microprofile-metrics' || params.module == 'microprofile-telemetry') {
+                                withEnv(["JAVA_HOME=${tool 'adoptopenjdk-hotspot-jdk11-latest'}", "PATH=${tool 'adoptopenjdk-hotspot-jdk11-latest'}/bin:${env.PATH}"]) {
+                                    sh "mvn ${settings} release:prepare release:perform -B -Dtag=${params.tag} -DdevelopmentVersion=${params.snapshotVersion} -DreleaseVersion=${params.releaseVersion} -Drevremark=${params.revremark} -Drelease.revision=${params.revremark} -DstagingProgressTimeoutMinutes=20"
+                                }
+                            } else {
+                                // execute with JDK 8 defined in the tools section
+                                sh "mvn ${settings} release:prepare release:perform -B -Dtag=${params.tag} -DdevelopmentVersion=${params.snapshotVersion} -DreleaseVersion=${params.releaseVersion} -Drevremark=${params.revremark} -Drelease.revision=${params.revremark} -DstagingProgressTimeoutMinutes=20"
+                            }
+
                         }
                     }
                 }
