@@ -17,7 +17,7 @@ pipeline {
         string(description: 'The SCM tag to apply', name: 'tag')
         choice(choices: 'Draft\nFinal', description: 'Revision Type', name: 'revremark')
         choice(choices: moduleString, description: 'Module', name: 'module')
-        string(description: 'Branch to use', name: 'branch', defaultValue: 'master')
+        string(description: 'Branch to use', name: 'branch', defaultValue: 'main')
         string(description: 'A list of the staging repositories to be used for the build', name: 'stagingList', defaultValue: '')
     }
 
@@ -46,7 +46,7 @@ pipeline {
                             def settings = '-s /home/jenkins/.m2/settings.xml'
 
                             if (params.stagingList != '') {
-                                sh "wget https://github.com/eclipse/microprofile-build-infra/raw/master/buildScripts/staging-augmenter-ubi8"
+                                sh "wget https://github.com/eclipse/microprofile-build-infra/raw/main/buildScripts/staging-augmenter-ubi8"
                                 sh "chmod +x ./staging-augmenter-ubi8"
                                 sh "./staging-augmenter-ubi8 -r ${params.stagingList} -o ../output-settings.xml /home/jenkins/.m2/settings.xml"
 
