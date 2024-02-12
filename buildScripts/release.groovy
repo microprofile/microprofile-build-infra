@@ -53,7 +53,7 @@ pipeline {
                                 settings = '-s ../output-settings.xml -Pmp-staging'
                             }
 
-                            if (params.module == 'microprofile-metrics' || params.module == 'microprofile-telemetry' || params.module == 'microprofile-parent' || params.module == 'microprofile-open-api' || params.module == 'microprofile-config') {
+                            if (params.module == 'microprofile-metrics' || params.module == 'microprofile-telemetry' || params.module == 'microprofile-parent' || params.module == 'microprofile-open-api' || params.module == 'microprofile-config' || params.module == 'microprofile') {
                                 withEnv(["JAVA_HOME=${tool 'adoptopenjdk-hotspot-jdk11-latest'}", "PATH=${tool 'adoptopenjdk-hotspot-jdk11-latest'}/bin:${env.PATH}"]) {
                                     sh "mvn -q -N io.takari:maven:0.7.7:wrapper -Dmaven=3.9.0 && ./mvnw -v"
                                     sh "./mvnw ${settings} release:prepare release:perform -B -Dtag=${params.tag} -DdevelopmentVersion=${params.snapshotVersion} -DreleaseVersion=${params.releaseVersion} -Drevremark=${params.revremark} -Drelease.revision=${params.revremark} -DstagingProgressTimeoutMinutes=20"
