@@ -9,7 +9,7 @@ pipeline {
     agent any
     tools {
         maven 'apache-maven-latest'
-        jdk 'adoptopenjdk-hotspot-jdk8-latest'
+        jdk 'temurin-jdk17-latest'
     }
     parameters {
         string(description: 'The next snapshot version', name: 'snapshotVersion')
@@ -53,16 +53,7 @@ pipeline {
                                 settings = '-s ../output-settings.xml -Pmp-staging'
                             }
 
-                            if (params.module == 'microprofile-metrics' || params.module == 'microprofile-telemetry' || params.module == 'microprofile-parent' || params.module == 'microprofile-open-api' || params.module == 'microprofile-config' || params.module == 'microprofile' || params.module == 'microprofile-reactive-messaging') {
-                                withEnv(["JAVA_HOME=${tool 'adoptopenjdk-hotspot-jdk11-latest'}", "PATH=${tool 'adoptopenjdk-hotspot-jdk11-latest'}/bin:${env.PATH}"]) {
-                                    sh "mvn -q -N io.takari:maven:0.7.7:wrapper -Dmaven=3.9.0 && ./mvnw -v"
-                                    sh "./mvnw ${settings} release:prepare release:perform -B -Dtag=${params.tag} -DdevelopmentVersion=${params.snapshotVersion} -DreleaseVersion=${params.releaseVersion} -Drevremark=${params.revremark} -Drelease.revision=${params.revremark} -DstagingProgressTimeoutMinutes=20"
-                                }
-                            } else {
-                                // execute with JDK 8 defined in the tools section
-                                sh "mvn ${settings} release:prepare release:perform -B -Dtag=${params.tag} -DdevelopmentVersion=${params.snapshotVersion} -DreleaseVersion=${params.releaseVersion} -Drevremark=${params.revremark} -Drelease.revision=${params.revremark} -DstagingProgressTimeoutMinutes=20"
-                            }
-
+                            sh "mvn ${settings} release:prepare release:perform -B -Dtag=${params.tag} -DdevelopmentVersion=${params.snapshotVersion} -DreleaseVersion=${params.releaseVersion} -Drevremark=${params.revremark} -Drelease.revision=${params.revremark} -DstagingProgressTimeoutMinutes=20"
                         }
                     }
                 }
