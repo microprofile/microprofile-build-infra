@@ -25,7 +25,12 @@ pipeline {
         stage("Checkout") {
             steps {
                 dir("${params.module}") {
-                    git credentialsId: 'github-bot-ssh', url: "git@github.com:eclipse/${params.module}.git", branch: params.branch
+                    if (params.module != "microprofile-opentracing")) {
+                        git credentialsId: 'github-bot-ssh', url: "git@github.com:eclipse/${params.module}.git", branch: params.branch
+                    }
+                    if (params.module == "microprofile-opentracing")) {
+                        git credentialsId: 'github-bot-ssh', url: "git@github.com:microprofile/${params.module}.git", branch: params.branch
+                    }
                 }
             }
         }
