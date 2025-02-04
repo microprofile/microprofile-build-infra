@@ -46,7 +46,7 @@ pipeline {
                             def settings = '-s /home/jenkins/.m2/settings.xml'
 
                             if (params.stagingList != '') {
-                                sh "wget https://github.com/eclipse/microprofile-build-infra/raw/main/buildScripts/staging-augmenter-ubi8"
+                                sh "wget https://github.com/microprofile/microprofile-build-infra/raw/main/buildScripts/staging-augmenter-ubi8"
                                 sh "chmod +x ./staging-augmenter-ubi8"
                                 sh "./staging-augmenter-ubi8 -r ${params.stagingList} -o ../output-settings.xml /home/jenkins/.m2/settings.xml"
 
@@ -81,19 +81,6 @@ pipeline {
                             }
                             if (fileExists('tck')) {
                                 sh "find tck -name \"*.jar\" | xargs -I{} scp {} genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/"
-                            }
-                            if (fileExists('tracing/spec')) {
-                                sh "ssh genie.microprofile@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing"
-                                sh "scp -r tracing/spec/target/generated-docs/* genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing"
-                            }
-                            if (fileExists('tracing/api')) {
-                                sh "scp tracing/api/target/*.jar genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing"
-
-                                sh "ssh genie.microprofile@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing/apidocs"
-                                sh "scp -r tracing/api/target/apidocs/* genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing/apidocs"
-                            }
-                            if (fileExists('tracing/tck')) {
-                                sh "find tck -name \"*.jar\" | xargs -I{} scp {} genie.microprofile@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion}/tracing/"
                             }
                         }
                     }
