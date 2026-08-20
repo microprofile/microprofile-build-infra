@@ -16,10 +16,9 @@ pipeline {
     }
 
     stages {
-        
         stage("Promote Main Artifacts") {
             steps {
-                sh "mvn --batch-mode -s /home/jenkins/.m2/settings.xml -Ppromote-stage -Drelease -Dnexus.staging.repository=${params.module}-maven2-staging -DskipTests deploy"
+                sh "mvn --batch-mode -s /home/jenkins/.m2/settings.xml nexus-staging:release -Dnexus.staging.repository=${params.module}-maven2-staging"
             }
         }
         stage("Move Specs From Staging") {
