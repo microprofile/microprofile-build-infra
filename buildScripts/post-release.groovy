@@ -12,14 +12,7 @@ pipeline {
     }
 
     stages {
-        stage("Move Specs From Staging") {
-            steps {
-                sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-                    sh "ssh genie.microprofile@projects-storage.eclipse.org [ -e /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion} ] || (echo 'The requested module ${params.module}-${params.releaseVersion} not found in microprofile/staging/ directory' && exit 1)"
-                    sh "ssh genie.microprofile@projects-storage.eclipse.org mv /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion} /home/data/httpd/download.eclipse.org/microprofile/"
-                }
-            }
-        }
+        
         stage("Promote Main Artifacts") {
             steps {
                 sh """
@@ -31,6 +24,14 @@ pipeline {
                       -DskipTests \
                       deploy
                 """
+            }
+        }
+        stage("Move Specs From Staging") {
+            steps {
+                sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
+                    sh "ssh genie.microprofile@projects-storage.eclipse.org [ -e /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion} ] || (echo 'The requested module ${params.module}-${params.releaseVersion} not found in microprofile/staging/ directory' && exit 1)"
+                    sh "ssh genie.microprofile@projects-storage.eclipse.org mv /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion} /home/data/httpd/download.eclipse.org/microprofile/"
+                }
             }
         }
     }
