@@ -6,6 +6,10 @@ def modules = ['microprofile','microprofile-bom','microprofile-config','micropro
 def moduleString = modules.join('\n')
 pipeline {
     agent any
+    tools {
+        maven 'apache-maven-latest'
+        jdk 'temurin-jdk17-latest'
+    }
     parameters {
         string(description: 'The release version', name: 'releaseVersion')
         choice(choices: moduleString, description: 'Module', name: 'module')
