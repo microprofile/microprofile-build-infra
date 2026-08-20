@@ -18,14 +18,14 @@ pipeline {
     stages {
         stage("Checkout") {
             steps {
-                dir("${params.module}") {
-                    git credentialsId: 'github-bot-ssh', url: "git@github.com:microprofile/${params.module}.git", branch: 'main'
+               dir("${params.module}") {
+                    git credentialsId: 'github-bot-ssh', url: "git@github.com:microprofile/${params.module}.git", branch: params.branch
                 }
             }
         }
         stage("Promote Main Artifacts") {
             steps {
-                sh "mvn --batch-mode -s /home/jenkins/.m2/settings.xml -Ppromote-stage -Drelease -Dnexus.staging.repository=microprofile-maven2-staging -DskipTests deploy"
+                sh "mvn --batch-mode -s /home/jenkins/.m2/settings.xml -Ppromote-stage -Drelease -Dnexus.staging.repository=${params.module}-maven2-staging -DskipTests deploy"
             }
         }
         stage("Move Specs From Staging") {
