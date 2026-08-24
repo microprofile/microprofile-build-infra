@@ -12,6 +12,7 @@ pipeline {
     }
     parameters {
         string(description: 'The release version', name: 'releaseVersion')
+        string(description: 'Branch to use', name: 'branch', defaultValue: 'main')
         choice(choices: moduleString, description: 'Module', name: 'module')
     }
 
