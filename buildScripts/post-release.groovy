@@ -26,7 +26,19 @@ pipeline {
         }
         stage("Promote Main Artifacts") {
             steps {
-                sh "mvn --batch-mode -s /home/jenkins/.m2/settings.xml -Ppromote-stage -Drelease -Dnexus.staging.repository=${params.module}-maven2-staging -DskipTests deploy"
+                dir("${params.module}") {
+                    withCredentials([file(credentialsId: 'secret-subkeys.asc', variable: 'KEYRING')]) {
+                        sh 'gpg --batch --import "${KEYRING}"'
+                        sh 'for fpr in $(gpg --list-keys --with-colons  | awk -F: \'/fpr:/ {print $10}\' | sort -u); do echo -e "5\ny\n" |  gpg --batch --command-fd 0 --expert --edit-key ${fpr} trust; done'
+                    }
+                    sshagent(['github-bot-ssh']) {
+                        sh '''
+                            git config --global user.email "microprofile-bot@eclipse.org"
+                            git config --global user.name "Eclipse MicroProfile bot"
+                        '''
+                    sh "mvn --batch-mode -s /home/jenkins/.m2/settings.xml -Ppromote-stage -Drelease -Dnexus.staging.repository=${params.module}-maven2-staging -DskipTests deploy"
+                    }
+                }
             }
         }
         stage("Move Specs From Staging") {
