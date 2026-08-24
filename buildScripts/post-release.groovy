@@ -24,6 +24,9 @@ pipeline {
             }
         }
         stage("Promote Main Artifacts") {
+            when {
+                expression { params.module != "microprofile-parent" }
+            }
             steps {
                 sh "mvn --batch-mode -s /home/jenkins/.m2/settings.xml -Ppromote-stage -Drelease -Dnexus.staging.repository=${params.module}-maven2-staging -DskipTests deploy"
             }
