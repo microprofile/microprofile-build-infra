@@ -1,6 +1,6 @@
 def modules = ['microprofile','microprofile-bom','microprofile-config','microprofile-context-propagation','microprofile-fault-tolerance',
 	'microprofile-health','microprofile-jwt-auth','microprofile-metrics',
-	'microprofile-open-api','microprofile-opentracing','microprofile-rest-client',
+	'microprofile-open-api','microprofile-opentracing','microprofile-parent', 'microprofile-rest-client',
 	'microprofile-reactive-streams-operators', 'microprofile-reactive-messaging', 
     'microprofile-lra', 'microprofile-graphql', 'microprofile-telemetry','microprofile-jwt-bridge']
 def moduleString = modules.join('\n')
@@ -24,14 +24,14 @@ pipeline {
             }
         }
         stage("Promote Main Artifacts") {
-            when {
-                expression { params.module != "microprofile-parent" }
-            }
             steps {
                 sh "mvn --batch-mode -s /home/jenkins/.m2/settings.xml -Ppromote-stage -Drelease -Dnexus.staging.repository=${params.module}-maven2-staging -DskipTests deploy"
             }
         }
         stage("Move Specs From Staging") {
+            when {
+                expression { params.module != "microprofile-parent" }
+            }
             steps {
                 sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
                     sh "ssh genie.microprofile@projects-storage.eclipse.org [ -e /home/data/httpd/download.eclipse.org/microprofile/staging/${params.module}-${params.releaseVersion} ] || (echo 'The requested module ${params.module}-${params.releaseVersion} not found in microprofile/staging/ directory' && exit 1)"
