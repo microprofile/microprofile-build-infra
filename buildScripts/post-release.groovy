@@ -36,7 +36,7 @@ pipeline {
                             git config --global user.email "microprofile-bot@eclipse.org"
                             git config --global user.name "Eclipse MicroProfile bot"
                         '''
-                    sh "mvn --batch-mode -s /home/jenkins/.m2/settings.xml -Ppromote-stage -Drelease -Dnexus.staging.repository=${params.module}-maven2-staging -DskipTests deploy"
+                        sh "mvn --batch-mode -s /home/jenkins/.m2/settings.xml -Ppromote-stage -Drelease -Dnexus.staging.repository=${params.module}-maven2-staging -DskipTests deploy"
                     }
                 }
             }
