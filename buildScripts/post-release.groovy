@@ -20,7 +20,14 @@ pipeline {
         stage("Checkout") {
             steps {
                dir("${params.module}") {
-                    git credentialsId: 'github-bot-ssh', url: "git@github.com:microprofile/${params.module}.git", branch: "${params.releaseVersion}"
+                    checkout([$class: 'GitSCM',
+                        branches: [[name: "refs/tags/${params.releaseVersion}"]],
+                        userRemoteConfigs: [[
+                            credentialsId: 'github-bot-ssh',
+                            url: "git@github.com:microprofile/${params.module}.git",
+                            refspec: '+refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*'
+                        ]]
+                    ])
                 }
             }
         }
